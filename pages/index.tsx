@@ -8,14 +8,21 @@ import fetch, { Response } from "node-fetch";
 import { useEffect, useState } from "react";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faAngleDoubleDown } from "@fortawesome/free-solid-svg-icons";
 
-library.add(faSearch);
+library.add(faSearch, faAngleDoubleDown);
 
 interface FilterList {
 	genres: Array<string>;
 	states: Array<string>;
 	attire: Array<string>;
+}
+
+interface CurrentFilter {
+	genres: string;
+	states: string;
+	attire: string;
+	alpha: string;
 }
 
 const IndexPage = ({ data }) => {
@@ -27,6 +34,14 @@ const IndexPage = ({ data }) => {
 		states: [""],
 		attire: [""],
 	});
+
+	const [filteredRestaurants, setFilteredRestaurants] = useState(data);
+	const [ currentFilter, setCurrentFilter ] = useState<CurrentFilter>({
+		genres: "all",
+		states: "all",
+		attire: "all",
+		alpha: "A-Z"
+	})
 
 	useEffect(() => {
 		console.log("restaurants was updated");
@@ -42,7 +57,8 @@ const IndexPage = ({ data }) => {
 
 			// SPLIT THE GENRES<STRING> INTO AN ARRAY OF STRINGS AND ASSIGN TO TEMP VAR 'ARR'
 			let arr: string[] = genre.split(",");
-
+			
+			restaurant.genre = arr.join(', ');
 			// LOOP THROUGH 'ARR' AND PUSH TO GENRES
 			arr.map((genre: string) => {
 				// FIRST CHECK TO SEE IF GENRE ALREADY EXISTS IN ARR
@@ -55,6 +71,21 @@ const IndexPage = ({ data }) => {
 			!attires.includes(attire) && attires.push(attire);
 		});
 
+		setFilteredRestaurants(() => {
+			if (currentFilter.alpha === "A-Z") {
+				return restaurants.sort((a, b) => {
+					if (a.name < b.name) { return -1 }
+					if (a.name  > b.name) { return 1}
+					return 0;
+				})
+			} else if (currentFilter.alpha === "Z-A") {
+				return restaurants.sort((a, b) => {
+					if (a.name > b.name) { return -1 }
+					if (a.name < b.name) { return 1}
+					return 0;
+				})
+			}
+		})
 		// UPDATE 'FILTER LIST' WITH ORGANIZED FILTER DATA
 		setFilterList({
 			genres,
@@ -72,7 +103,7 @@ const IndexPage = ({ data }) => {
 					<Paginate />
 				</div>
 				<div className="app--display">
-				  <Table restaurants={restaurants}/>
+				  <Table restaurants={filteredRestaurants}/>
 				</div>
 			</section>
 		</Layout>
