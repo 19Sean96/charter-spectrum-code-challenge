@@ -5,6 +5,11 @@
     padding: 0 20px 40px;
     box-shadow: 1px 3px 15px rgba($blue, .3);
 
+    @media screen and (max-width: 1200px) {
+        padding: 0 20px;
+        margin-bottom: 10px;
+    }
+
     &--title {
         position: relative;
         text-transform: uppercase;
@@ -46,6 +51,14 @@
 
             select[name="state"] {
                 text-transform: uppercase;
+            }
+        }
+
+        @media screen and (max-width: 1200px) {
+            display: flex;
+            flex-wrap: wrap;
+            &--row {
+                margin: 5px 10px;
             }
         }
     }

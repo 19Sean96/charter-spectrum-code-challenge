@@ -32,13 +32,20 @@ body {
         justify-content: space-between;
         height: 80vh;
         margin-top: 20px;
-    }
+
+        @media screen and (max-width: 1200px) {
+            flex-direction: column;
+        }    }
 
     &--controls {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         flex-grow: 1;
+        @media screen and (max-width: 1200px) {
+            flex-direction: row;
+            justify-content: space-evenly;
+        }
     }
     &--display {
         flex-grow: 3;
