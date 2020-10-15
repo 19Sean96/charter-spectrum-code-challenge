@@ -29,18 +29,25 @@ interface Pages {
 	total: number;
 }
 
+
 const IndexPage = (props:any) => {
-	// console.log("PROPS", data);
+	// data from API
 	const { data } = props;
+
+	// raw restaurant data
 	const [restaurants, setRestaurants] = useState(data);
 
+	// updated restaurant data with filters applied
+	const [filteredRestaurants, setFilteredRestaurants] = useState(data);
+
+	// data for filter form
 	const [filterList, setFilterList] = useState<FilterList>({
 		genres: [""],
 		states: [""],
 		attire: [""],
 	});
 
-	const [filteredRestaurants, setFilteredRestaurants] = useState(data);
+	// current filters being applied to filteredRestaurants hook
 	const [ currentFilter, setCurrentFilter ] = useState<CurrentFilter>({
 		genres: "all",
 		states: "all",
@@ -48,24 +55,32 @@ const IndexPage = (props:any) => {
 		alpha: "A-Z"
 	})
 
+	// current/total page data - updated based on filteredRestaurants.length
 	const [ pages, updatePages ] = useState<Pages>({
 		current: 1,
 		total: 1,
 	})
 
+	// current page data to serve
 	const [ pageContent, setPageContent ] = useState([])
 
+
+	// function for handling query from SearchBox.tsx
 	const handleSearchQuery = (includeFilter:boolean = true, query:string) => {
-		console.log(includeFilter, query)
+
 		let result;
+
 		// CHECKS IF 'NAME', 'CITY' OR 'GENRE' CONTAINS QUERY
+		// apply filters
 		if (includeFilter) {
 			result = filteredRestaurants.filter((restaurant:any) => {
 				const { name, city, genre } = restaurant
 
 				return name.includes(query) || city.includes(query) || genre.includes(query)
 			})
-		} else {
+		} 
+		// do not apply filters
+		else {
 			result = restaurants.filter((restaurant:any) => {
 				const { name, city, genre } = restaurant
 
@@ -73,27 +88,28 @@ const IndexPage = (props:any) => {
 			})
 		}
 		
-		console.log(result);
 		setFilteredRestaurants(result)
 	}
 
+	// init effect - fallback if data is null at start
 	useEffect(() => {
 		setRestaurants(data)
 	}, [])
 
 	useEffect(() => {
-		console.log("restaurants was updated");
 
 		// INITIALIZE 3 FILTER VARS TO RECEIVE AN ARRAY OF STRINGS
 		let genres: string[] = [],
 			states: string[] = [],
 			attires: string[] = [];
 
+			// check if restaurants exists first
 		if (restaurants) {
-					// LOOPS THROUGH THE RESTUARANTS RETURNED FROM THE API
 
 			restaurants.map((restaurant: any) => {
 				const { name, genre, city, state, attire } = restaurant;
+				
+				// switch strings to lowercase for data processing
 				restaurant.name = name.toLowerCase();
 				restaurant.genre = genre.toLowerCase();
 				restaurant.city = city.toLowerCase();
@@ -156,8 +172,8 @@ const IndexPage = (props:any) => {
 
 	}, [restaurants, currentFilter]);
 
+	// update pages hook when filteredRestaurants is updated - meaning a new filter has been applied
 	useEffect(() => {
-		console.log("TOTAL RESTAURANTS", filteredRestaurants.length);
 		let totalPages = 0
 		for (let i = 0; i < filteredRestaurants.length; i++) {
 			i % 10 === 0 && totalPages++;
@@ -177,6 +193,7 @@ const IndexPage = (props:any) => {
 
 	}, [filteredRestaurants])
 
+	// when pages changes (such as changing from page 1 to 2 ) reassess page contents
 	useEffect(() => {
 		setPageContent(filteredRestaurants.slice((pages.current - 1) * 10, pages.current * 10))
 	}, [pages])
@@ -197,6 +214,7 @@ const IndexPage = (props:any) => {
 	);
 };
 
+// GET DATA
 export const getServerSideProps: GetServerSideProps = async () => {
 	let headers: any = {
 		Authorization: process.env.AUTH_KEY,
