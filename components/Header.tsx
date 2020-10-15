@@ -1,6 +1,6 @@
 import SearchBox from './SearchBox'
 
-const Header = ( props ) => {
+const Header = ( props:any ) => {
 
     return (
         <header className="header">
