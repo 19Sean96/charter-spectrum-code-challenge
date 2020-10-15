@@ -2,6 +2,9 @@
     border-radius: 48px;
     background-color: $orange;
     text-align: center;
+    padding: 0 20px 40px;
+    box-shadow: 1px 3px 15px rgba($blue, .3);
+
     &--title {
         position: relative;
         text-transform: uppercase;
@@ -17,6 +20,28 @@
             width: 60%;
             height: 2px;
             background-color: $blue;
+        }
+    }
+
+    &--options {
+        width: 80%;
+        margin: 0 auto;
+        &--row {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            font-size: 2.2rem;
+            margin: 5px 0;
+            text-transform: uppercase;
+            color: $blue;
+
+            select {
+                width: 50%;
+                background-color: $orange;
+                border: 3px solid $blue;
+                border-radius: 6px;
+                color: $blue;
+            }
         }
     }
 }

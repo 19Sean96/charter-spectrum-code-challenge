@@ -6,11 +6,64 @@
         background-color: $blue;
         border-radius: 20px;
         overflow: hidden;
+        box-shadow: 1px 3px 15px rgba($blue, .3);
+    }
+
+    &--heading {
+        padding: 20px 25px;
+        display: flex;
+        position: relative;
+
+        &--underline {
+            margin: 0 25px;
+
+            position: absolute;
+            bottom: 8px;
+            left: 0;
+            height: 1px;
+            width: calc(100% - 50px);
+            background-color: $orange;
+        }
+
+        &--col {
+            color: $light-grey;
+            font-weight: 300;
+            text-transform: uppercase;
+            font-size: 1.9rem;
+        }
+
+        &__name {
+            width: 21.5%;
+        }
+        &__city {
+            width: 18%;
+        }
+        &__state {
+            width: 9.2%;
+        }
+        &__phone {
+            width: 16.4%;
+        }
+        &__genres {
+            width: 35.3%;
+        }
+    }
+
+    &--data {
+        height: 100%;
+        margin-bottom: 150px;
+
+        span {
+            display: block;
+            height: 150px
+        }
     }
 
     &--row {
-        height: 30px;
-
+        min-height: 30px;
+        padding: 0 25px;
+        margin: 15px 0;
+        position: relative;
         &__wrapper {
 
             &--even {
@@ -21,5 +74,47 @@
                 background-color: $light-peach;
             }
         }
+
+        &--main {
+            display: flex;
+            padding: 38px 0;
+
+            p {
+                font-size: 1.4rem;
+                padding: 0 10px 0 0;
+            }
+        }
+        &__name {
+            width: 21.5%;
+        }
+        &__city {
+            width: 18%;
+        }
+        &__state {
+            width: 9.2%;
+        }
+        &__phone {
+            width: 16.4%;
+        }
+        &__genres {
+            width: 35.3%;
+        }
+
+        &--expand {
+            position: absolute;
+            bottom: 0; right: 25px;
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            border: none;
+            background-color: $orange;
+            transform: translateY(30%) rotate(0);
+            cursor: pointer;
+            svg {
+                color: $blue;
+                font-size: 21px;
+            }
+        }
+
     }
 }

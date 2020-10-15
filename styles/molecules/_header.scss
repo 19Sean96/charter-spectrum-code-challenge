@@ -23,6 +23,7 @@
         overflow: hidden;
         border-bottom: 3px solid $peach;
         transition: border-radius .15s ease-out;
+        box-shadow: 0px 2px 15px rgba($blue, .1);
 
         input, label, svg {
             position: absolute;
