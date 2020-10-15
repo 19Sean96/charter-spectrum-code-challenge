@@ -72,19 +72,33 @@ const IndexPage = ({ data }) => {
 		});
 
 		setFilteredRestaurants(() => {
+			let list = []
+			// set alpha
 			if (currentFilter.alpha === "A-Z") {
-				return restaurants.sort((a, b) => {
+				list = restaurants.sort((a, b) => {
 					if (a.name < b.name) { return -1 }
 					if (a.name  > b.name) { return 1}
 					return 0;
 				})
 			} else if (currentFilter.alpha === "Z-A") {
-				return restaurants.sort((a, b) => {
+				list = restaurants.sort((a, b) => {
 					if (a.name > b.name) { return -1 }
 					if (a.name < b.name) { return 1}
 					return 0;
 				})
 			}
+			if (currentFilter.genres !== "all") {
+				list = list.filter(item => item.genre.includes(currentFilter.genres))
+			}
+			if (currentFilter.states !== "all") {
+				list = list.filter(item => item.state.includes(currentFilter.states))
+			}
+			if (currentFilter.attire !== "all") {
+				list = list.filter(item => item.attire.includes(currentFilter.attire))
+			}		
+			console.log(list);
+
+			return list
 		})
 		// UPDATE 'FILTER LIST' WITH ORGANIZED FILTER DATA
 		setFilterList({
@@ -92,14 +106,14 @@ const IndexPage = ({ data }) => {
 			states,
 			attire: attires,
 		});
-	}, [restaurants]);
+	}, [restaurants, currentFilter]);
 
 	return (
 		<Layout title="Home | Next.js + TypeScript Example">
 			<Header />
 			<section className="app--data">
 				<div className="app--controls">
-					<Filter filterList={filterList} />
+					<Filter filterList={filterList} currentFilter={currentFilter} setCurrentFilter={setCurrentFilter}/>
 					<Paginate />
 				</div>
 				<div className="app--display">
