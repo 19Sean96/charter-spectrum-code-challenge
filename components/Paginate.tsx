@@ -8,7 +8,7 @@ const Paginate = (props: any) => {
 			<div className="paginate--controls">
 				<button
 					className="paginate--controls--prev"
-					onClick={(e) => {
+					onClick={() => {
                         
 						pages.current > 1 && updatePages({
 							current: pages.current - 1,
@@ -25,7 +25,7 @@ const Paginate = (props: any) => {
 				</div>
 				<button
 					className="paginate--controls--next"
-					onClick={(e) => {
+					onClick={() => {
                         // console.log(pages.current++);
 
 						pages.current < pages.total && updatePages({

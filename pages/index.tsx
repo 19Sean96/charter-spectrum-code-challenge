@@ -7,7 +7,6 @@ import { GetServerSideProps } from "next";
 import fetch, { Response } from "node-fetch";
 import { useEffect, useState } from "react";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faAngleDoubleDown, faArrowAltCircleRight, faArrowAltCircleLeft } from "@fortawesome/free-solid-svg-icons";
 
 library.add(faSearch, faAngleDoubleDown, faArrowAltCircleRight, faArrowAltCircleLeft);
@@ -30,8 +29,9 @@ interface Pages {
 	total: number;
 }
 
-const IndexPage = ({ data }) => {
+const IndexPage = (props:any) => {
 	// console.log("PROPS", data);
+	const { data } = props;
 	const [restaurants, setRestaurants] = useState(data);
 
 	const [filterList, setFilterList] = useState<FilterList>({
@@ -60,21 +60,26 @@ const IndexPage = ({ data }) => {
 		let result;
 		// CHECKS IF 'NAME', 'CITY' OR 'GENRE' CONTAINS QUERY
 		if (includeFilter) {
-			result = filteredRestaurants.filter(restaurant => {
+			result = filteredRestaurants.filter((restaurant:any) => {
 				const { name, city, genre } = restaurant
 
 				return name.includes(query) || city.includes(query) || genre.includes(query)
 			})
 		} else {
-			result = restaurants.filter(restaurant => {
+			result = restaurants.filter((restaurant:any) => {
 				const { name, city, genre } = restaurant
 
 				return name.includes(query) || city.includes(query) || genre.includes(query)
 			})
 		}
+		
 		console.log(result);
 		setFilteredRestaurants(result)
 	}
+
+	useEffect(() => {
+		setRestaurants(data)
+	}, [])
 
 	useEffect(() => {
 		console.log("restaurants was updated");
@@ -84,65 +89,70 @@ const IndexPage = ({ data }) => {
 			states: string[] = [],
 			attires: string[] = [];
 
-		// LOOPS THROUGH THE RESTUARANTS RETURNED FROM THE API
-		restaurants.map((restaurant: any) => {
-			const { name, genre, city, state, attire } = restaurant;
-			restaurant.name = name.toLowerCase();
-			restaurant.genre = genre.toLowerCase();
-			restaurant.city = city.toLowerCase();
-			restaurant.state = state.toLowerCase();
-			restaurant.attire = attire.toLowerCase();
-			// SPLIT THE GENRES<STRING> INTO AN ARRAY OF STRINGS AND ASSIGN TO TEMP VAR 'ARR'
-			let arr: string[] = restaurant.genre.split(",");
+		if (restaurants) {
+					// LOOPS THROUGH THE RESTUARANTS RETURNED FROM THE API
+
+			restaurants.map((restaurant: any) => {
+				const { name, genre, city, state, attire } = restaurant;
+				restaurant.name = name.toLowerCase();
+				restaurant.genre = genre.toLowerCase();
+				restaurant.city = city.toLowerCase();
+				restaurant.state = state.toLowerCase();
+				restaurant.attire = attire.toLowerCase();
+				// SPLIT THE GENRES<STRING> INTO AN ARRAY OF STRINGS AND ASSIGN TO TEMP VAR 'ARR'
+				let arr: string[] = restaurant.genre.split(",");
+				
+				restaurant.genre = arr.join(', ');
+				// LOOP THROUGH 'ARR' AND PUSH TO GENRES
+				arr.map((genre: string) => {
+					genre = genre.replace(/\s+/g, '')
+					// FIRST CHECK TO SEE IF GENRE ALREADY EXISTS IN ARR
+					if (!genres.includes(genre)) {
+						genres.push(genre);
+					}
+				});
+	
+				!states.includes(state) && states.push(state);
+				!attires.includes(attire) && attires.push(attire);
+			});
 			
-			restaurant.genre = arr.join(', ');
-			// LOOP THROUGH 'ARR' AND PUSH TO GENRES
-			arr.map((genre: string) => {
-				genre = genre.replace(/\s+/g, '')
-				// FIRST CHECK TO SEE IF GENRE ALREADY EXISTS IN ARR
-				if (!genres.includes(genre)) {
-					genres.push(genre);
-				}
+			setFilterList({
+				genres: genres,
+				states: states,
+				attire: attires,
 			});
 
-			!states.includes(state) && states.push(state);
-			!attires.includes(attire) && attires.push(attire);
-		});
+			setFilteredRestaurants(() => {
+				let list = []
+				// set alpha
+				if (currentFilter.alpha === "A-Z") {
+					list = restaurants.sort((a:any, b:any) => {
+						if (a.name < b.name) { return -1 }
+						if (a.name  > b.name) { return 1}
+						return 0;
+					})
+				} else if (currentFilter.alpha === "Z-A") {
+					list = restaurants.sort((a:any, b:any) => {
+						if (a.name > b.name) { return -1 }
+						if (a.name < b.name) { return 1}
+						return 0;
+					})
+				}
+				if (currentFilter.genres !== "all") {
+					list = list.filter((item:any) => item.genre.includes(currentFilter.genres))
+				}
+				if (currentFilter.states !== "all") {
+					list = list.filter((item:any) => item.state.includes(currentFilter.states))
+				}
+				if (currentFilter.attire !== "all") {
+					list = list.filter((item:any) => item.attire.includes(currentFilter.attire))
+				}		
+	
+				return list
+			})
+		}
 
-		setFilterList({
-			genres: genres,
-			states: states,
-			attire: attires,
-		});
 
-		setFilteredRestaurants(() => {
-			let list = []
-			// set alpha
-			if (currentFilter.alpha === "A-Z") {
-				list = restaurants.sort((a, b) => {
-					if (a.name < b.name) { return -1 }
-					if (a.name  > b.name) { return 1}
-					return 0;
-				})
-			} else if (currentFilter.alpha === "Z-A") {
-				list = restaurants.sort((a, b) => {
-					if (a.name > b.name) { return -1 }
-					if (a.name < b.name) { return 1}
-					return 0;
-				})
-			}
-			if (currentFilter.genres !== "all") {
-				list = list.filter(item => item.genre.includes(currentFilter.genres))
-			}
-			if (currentFilter.states !== "all") {
-				list = list.filter(item => item.state.includes(currentFilter.states))
-			}
-			if (currentFilter.attire !== "all") {
-				list = list.filter(item => item.attire.includes(currentFilter.attire))
-			}		
-
-			return list
-		})
 
 	}, [restaurants, currentFilter]);
 
