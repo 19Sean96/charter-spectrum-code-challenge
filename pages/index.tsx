@@ -57,6 +57,23 @@ const IndexPage = ({ data }) => {
 
 	const handleSearchQuery = (includeFilter:boolean = true, query:string) => {
 		console.log(includeFilter, query)
+		let result;
+		// CHECKS IF 'NAME', 'CITY' OR 'GENRE' CONTAINS QUERY
+		if (includeFilter) {
+			result = filteredRestaurants.filter(restaurant => {
+				const { name, city, genre } = restaurant
+
+				return name.includes(query) || city.includes(query) || genre.includes(query)
+			})
+		} else {
+			result = restaurants.filter(restaurant => {
+				const { name, city, genre } = restaurant
+
+				return name.includes(query) || city.includes(query) || genre.includes(query)
+			})
+		}
+		console.log(result);
+		setFilteredRestaurants(result)
 	}
 
 	useEffect(() => {
@@ -69,10 +86,14 @@ const IndexPage = ({ data }) => {
 
 		// LOOPS THROUGH THE RESTUARANTS RETURNED FROM THE API
 		restaurants.map((restaurant: any) => {
-			const { genre, state, attire } = restaurant;
-
+			const { name, genre, city, state, attire } = restaurant;
+			restaurant.name = name.toLowerCase();
+			restaurant.genre = genre.toLowerCase();
+			restaurant.city = city.toLowerCase();
+			restaurant.state = state.toLowerCase();
+			restaurant.attire = attire.toLowerCase();
 			// SPLIT THE GENRES<STRING> INTO AN ARRAY OF STRINGS AND ASSIGN TO TEMP VAR 'ARR'
-			let arr: string[] = genre.split(",");
+			let arr: string[] = restaurant.genre.split(",");
 			
 			restaurant.genre = arr.join(', ');
 			// LOOP THROUGH 'ARR' AND PUSH TO GENRES
@@ -122,9 +143,7 @@ const IndexPage = ({ data }) => {
 
 			return list
 		})
-		// UPDATE 'FILTER LIST' WITH ORGANIZED FILTER DATA
-		// updatePages(() => {
-		// })
+
 	}, [restaurants, currentFilter]);
 
 	useEffect(() => {
