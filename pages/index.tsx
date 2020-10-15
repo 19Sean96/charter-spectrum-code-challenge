@@ -27,7 +27,7 @@ interface CurrentFilter {
 
 interface Pages {
 	current: number;
-	total: number
+	total: number;
 }
 
 const IndexPage = ({ data }) => {
@@ -50,8 +50,14 @@ const IndexPage = ({ data }) => {
 
 	const [ pages, updatePages ] = useState<Pages>({
 		current: 1,
-		total: 1
+		total: 1,
 	})
+
+	const [ pageContent, setPageContent ] = useState([])
+
+	const handleSearchQuery = (includeFilter:boolean = true, query:string) => {
+		console.log(includeFilter, query)
+	}
 
 	useEffect(() => {
 		console.log("restaurants was updated");
@@ -128,24 +134,34 @@ const IndexPage = ({ data }) => {
 			i % 10 === 0 && totalPages++;
 		}
 		console.log("TOTAL PAGES", totalPages);
-		
-		updatePages({
-			current: pages.current,
-			total: totalPages
-		});
+		if (totalPages >= pages.current) {
+			updatePages({
+				current: pages.current,
+				total: totalPages
+			});
+		} else (
+			updatePages({
+				current: 1,
+				total: totalPages
+			})
+		)
 
 	}, [filteredRestaurants])
 
+	useEffect(() => {
+		setPageContent(filteredRestaurants.slice((pages.current - 1) * 10, pages.current * 10))
+	}, [pages])
+
 	return (
 		<Layout title="Home | Next.js + TypeScript Example">
-			<Header />
+			<Header handleSearchQuery={handleSearchQuery}/>
 			<section className="app--data">
 				<div className="app--controls">
 					<Filter filterList={filterList} currentFilter={currentFilter} setCurrentFilter={setCurrentFilter}/>
 					<Paginate pages={pages} updatePages={updatePages}/>
 				</div>
 				<div className="app--display">
-				  <Table restaurants={filteredRestaurants}/>
+				  <Table restaurants={pageContent}/>
 				</div>
 			</section>
 		</Layout>
