@@ -103,10 +103,10 @@
         &--expand {
             position: absolute;
             bottom: 0; right: 25px;
-            width: 54px;
-            height: 54px;
+            width: 54px; height: 54px;
             border-radius: 50%;
             border: none;
+            box-shadow: 0 -1px 12px rgba($blue, .2);
             background-color: $orange;
             transform: translateY(30%) rotate(0);
             cursor: pointer;
