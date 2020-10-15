@@ -7,17 +7,16 @@ interface SearchInput {
 }
 
 const SearchBox = (props: any) => {
-
-    const { handleSearchQuery } = props
+	const { handleSearchQuery } = props;
 
 	const [searchInput, handleSearchInput] = useState<SearchInput>({
 		value: "",
 		focused: false,
-    });
-    
-    const [ checked, setChecked ] = useState(true)
+	});
 
-    const ref = useRef(null)
+	const [checked, setChecked] = useState(true);
+
+	const ref = useRef<HTMLInputElement>(null);
 	const handleKeyPress = (e: any) => {
 		e.preventDefault();
 		console.log(typeof e);
@@ -40,7 +39,7 @@ const SearchBox = (props: any) => {
 				}}
 			>
 				<input
-                    ref={ref}
+					ref={ref}
 					type="text"
 					name="search"
 					id="search"
@@ -71,31 +70,41 @@ const SearchBox = (props: any) => {
 				>
 					Name, City or Genre
 				</label>
-				<FontAwesomeIcon icon="search" onClick={e => {
-                    handleSearchQuery(checked, searchInput.value)
-
-                    ref.current.value = ''
-                    handleSearchInput({
-                        value: ref.current.value,
-                        focused: searchInput.focused
-                    })
-                    
-                }}/>
+				<FontAwesomeIcon
+					icon="search"
+					onClick={() => {
+						handleSearchQuery(checked, searchInput.value);
+						if (ref.current !== null) {
+							ref.current.value = "";
+							handleSearchInput({
+								value: ref.current.value,
+								focused: searchInput.focused,
+							});
+						}
+					}}
+				/>
 			</div>
-            <button className="clear-search" onClick={(e) => {
-                ref.current.value = ''
-                handleSearchInput({
-                    value: ref.current.value,
-                    focused: searchInput.focused
-                })
-            }}>Clear Search</button>
+			<button
+				className="clear-search"
+				onClick={() => {
+					if (ref.current !== null) {
+						ref.current.value = "";
+						handleSearchInput({
+							value: ref.current.value,
+							focused: searchInput.focused,
+						});
+					}
+				}}
+			>
+				Clear Search
+			</button>
 			<div className="header--searchbox__toggle-filters">
 				<input
-                    onChange={e => setChecked(!checked)}
+					onChange={() => setChecked(!checked)}
 					type="checkbox"
 					name="includeFilter"
-                    id="includeFilter"
-                    checked={checked}
+					id="includeFilter"
+					checked={checked}
 				/>
 				<label htmlFor="includeFilter">Include Filter?</label>
 			</div>
