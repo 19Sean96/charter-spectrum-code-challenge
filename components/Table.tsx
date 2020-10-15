@@ -27,7 +27,7 @@ const Table = (props: any) => {
 					style={{ width: "100%", height: "100%" }}
 					universal={true}
 				>
-					{restaurants.map((restaurant: any, index: number) => {
+					{restaurants.length > 0 ? restaurants.map((restaurant: any, index: number) => {
 						return (
 							<div
 								key={index}
@@ -38,7 +38,9 @@ const Table = (props: any) => {
 								<TableRow restaurant={restaurant} />
 							</div>
 						);
-					})}
+					}) : (
+						<div className="no-results">No Results Found </div>
+					)}
 					<span></span>
 				</Scrollbars>
 			</div>
