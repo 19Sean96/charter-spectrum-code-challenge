@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 
 const Filter = (props: any) => {
 	const { attire, genres, states } = props.filterList;
-    console.log(attire, genres, states);
     
     const [filters, updateFilters] = useState(props.currentFilter)
 
