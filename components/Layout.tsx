@@ -20,10 +20,6 @@ const Layout = ({ children, title = "Restuarant Table Organizer" }: Props) => (
 		</Head>
 		<main className="app">
 			{children}
-			<footer>
-				<hr />
-				<span>I'm here to stay (Footer)</span>
-			</footer>
 		</main>
 	</div>
 );
