@@ -182,7 +182,7 @@ const IndexPage = (props:any) => {
 	}, [pages])
 
 	return (
-		<Layout title="Home | Next.js + TypeScript Example">
+		<Layout title="Home | Code Challenge | Restaurant Table">
 			<Header handleSearchQuery={handleSearchQuery}/>
 			<section className="app--data">
 				<div className="app--controls">
