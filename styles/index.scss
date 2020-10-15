@@ -1,0 +1,27 @@
+@import './util/vars';
+
+@import './molecules/header';
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 10px;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: $light-grey;
+    font-family: urbane, serif;
+    font-weight: 400;
+}
+
+
+.app {
+    width: 90vw;
+    max-width: 1300px;
+    margin: 0 auto;
+}
+
