@@ -1,7 +1,9 @@
 @import './util/vars';
 
 @import './molecules/header';
-
+@import './molecules/table';
+@import './molecules/filter';
+@import './molecules/paginate';
 * {
     box-sizing: border-box;
 }
@@ -23,5 +25,24 @@ body {
     width: 90vw;
     max-width: 1300px;
     margin: 0 auto;
+
+    &--data {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        height: 80vh;
+        margin-top: 20px;
+    }
+
+    &--controls {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        flex-grow: 1;
+    }
+    &--display {
+        flex-grow: 3;
+        margin-left: 20px;
+    }
 }
 

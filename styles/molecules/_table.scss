@@ -1,0 +1,25 @@
+.table {
+
+    &__wrapper {
+        // overflow-y: scroll;
+        height: 100%;
+        background-color: $blue;
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+    &--row {
+        height: 30px;
+
+        &__wrapper {
+
+            &--even {
+                background-color: $light-grey;
+            }
+
+            &--odd {
+                background-color: $light-peach;
+            }
+        }
+    }
+}
