@@ -8,9 +8,9 @@ import fetch, { Response } from "node-fetch";
 import { useEffect, useState } from "react";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch, faAngleDoubleDown } from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faAngleDoubleDown, faArrowAltCircleRight, faArrowAltCircleLeft } from "@fortawesome/free-solid-svg-icons";
 
-library.add(faSearch, faAngleDoubleDown);
+library.add(faSearch, faAngleDoubleDown, faArrowAltCircleRight, faArrowAltCircleLeft);
 
 interface FilterList {
 	genres: Array<string>;
@@ -23,6 +23,11 @@ interface CurrentFilter {
 	states: string;
 	attire: string;
 	alpha: string;
+}
+
+interface Pages {
+	current: number;
+	total: number
 }
 
 const IndexPage = ({ data }) => {
@@ -43,6 +48,11 @@ const IndexPage = ({ data }) => {
 		alpha: "A-Z"
 	})
 
+	const [ pages, updatePages ] = useState<Pages>({
+		current: 1,
+		total: 1
+	})
+
 	useEffect(() => {
 		console.log("restaurants was updated");
 
@@ -61,6 +71,7 @@ const IndexPage = ({ data }) => {
 			restaurant.genre = arr.join(', ');
 			// LOOP THROUGH 'ARR' AND PUSH TO GENRES
 			arr.map((genre: string) => {
+				genre = genre.replace(/\s+/g, '')
 				// FIRST CHECK TO SEE IF GENRE ALREADY EXISTS IN ARR
 				if (!genres.includes(genre)) {
 					genres.push(genre);
@@ -69,6 +80,12 @@ const IndexPage = ({ data }) => {
 
 			!states.includes(state) && states.push(state);
 			!attires.includes(attire) && attires.push(attire);
+		});
+
+		setFilterList({
+			genres: genres,
+			states: states,
+			attire: attires,
 		});
 
 		setFilteredRestaurants(() => {
@@ -96,17 +113,28 @@ const IndexPage = ({ data }) => {
 			if (currentFilter.attire !== "all") {
 				list = list.filter(item => item.attire.includes(currentFilter.attire))
 			}		
-			console.log(list);
 
 			return list
 		})
 		// UPDATE 'FILTER LIST' WITH ORGANIZED FILTER DATA
-		setFilterList({
-			genres,
-			states,
-			attire: attires,
-		});
+		// updatePages(() => {
+		// })
 	}, [restaurants, currentFilter]);
+
+	useEffect(() => {
+		console.log("TOTAL RESTAURANTS", filteredRestaurants.length);
+		let totalPages = 0
+		for (let i = 0; i < filteredRestaurants.length; i++) {
+			i % 10 === 0 && totalPages++;
+		}
+		console.log("TOTAL PAGES", totalPages);
+		
+		updatePages({
+			current: pages.current,
+			total: totalPages
+		});
+
+	}, [filteredRestaurants])
 
 	return (
 		<Layout title="Home | Next.js + TypeScript Example">
@@ -114,7 +142,7 @@ const IndexPage = ({ data }) => {
 			<section className="app--data">
 				<div className="app--controls">
 					<Filter filterList={filterList} currentFilter={currentFilter} setCurrentFilter={setCurrentFilter}/>
-					<Paginate />
+					<Paginate pages={pages} updatePages={updatePages}/>
 				</div>
 				<div className="app--display">
 				  <Table restaurants={filteredRestaurants}/>
