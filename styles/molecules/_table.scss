@@ -64,6 +64,7 @@
         padding: 0 25px;
         margin: 15px 0;
         position: relative;
+        text-transform: capitalize;
         &__wrapper {
 
             &--even {
@@ -92,6 +93,7 @@
         }
         &__state {
             width: 9.2%;
+            text-transform: uppercase;
         }
         &__phone {
             width: 16.4%;

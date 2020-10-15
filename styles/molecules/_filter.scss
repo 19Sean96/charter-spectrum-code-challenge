@@ -41,6 +41,11 @@
                 border: 3px solid $blue;
                 border-radius: 6px;
                 color: $blue;
+                text-transform: capitalize;
+            }
+
+            select[name="state"] {
+                text-transform: uppercase;
             }
         }
     }
