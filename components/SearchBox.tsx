@@ -22,6 +22,14 @@ const SearchBox = (props: any) => {
 		console.log(typeof e);
 
 		if (e.keyCode == 13) {
+			handleSearchQuery(checked, searchInput.value);
+			if (ref.current !== null) {
+				ref.current.value = "";
+				handleSearchInput({
+					value: ref.current.value,
+					focused: searchInput.focused,
+				});
+			}
 		} else {
 			handleSearchInput({
 				value: e.target.value,
@@ -93,6 +101,7 @@ const SearchBox = (props: any) => {
 							value: ref.current.value,
 							focused: searchInput.focused,
 						});
+						handleSearchQuery(checked, "")
 					}
 				}}
 			>

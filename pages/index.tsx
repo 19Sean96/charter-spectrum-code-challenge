@@ -72,21 +72,26 @@ const IndexPage = (props:any) => {
 
 		// CHECKS IF 'NAME', 'CITY' OR 'GENRE' CONTAINS QUERY
 		// apply filters
-		if (includeFilter) {
-			result = filteredRestaurants.filter((restaurant:any) => {
-				const { name, city, genre } = restaurant
-
-				return name.includes(query) || city.includes(query) || genre.includes(query)
-			})
-		} 
-		// do not apply filters
-		else {
-			result = restaurants.filter((restaurant:any) => {
-				const { name, city, genre } = restaurant
-
-				return name.includes(query) || city.includes(query) || genre.includes(query)
-			})
+		if (query.length == 0) {
+			result = restaurants
+		} else {
+			if (includeFilter) {
+				result = filteredRestaurants.filter((restaurant:any) => {
+					const { name, city, genre } = restaurant
+	
+					return name.includes(query) || city.includes(query) || genre.includes(query)
+				})
+			} 
+			// do not apply filters
+			else {
+				result = restaurants.filter((restaurant:any) => {
+					const { name, city, genre } = restaurant
+	
+					return name.includes(query) || city.includes(query) || genre.includes(query)
+				})
+			}
 		}
+
 		
 		setFilteredRestaurants(result)
 	}
